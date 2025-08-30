@@ -12,6 +12,29 @@ resource "aws_iam_openid_connect_provider" "oidc-git" {
 
 }
 
+resource "aws_iam_role" "app_runner" {
+  name = "app_runner"
+
+  assume_role_policy = jsonencode({
+    Version : "2012-10-17",
+    Statement : [
+      {
+        Sid : "Statement1",
+        Effect : "Allow",
+        Principal : {
+          service : "build.apprunner.amazonaws.com"
+        },
+        Action : "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "app_runner_ecr_readonly" {
+  role       = aws_iam_role.app_runner.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+}
+
 resource "aws_iam_role" "ecr_role" {
   name = "ecr_role"
 
