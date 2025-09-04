@@ -76,13 +76,22 @@ resource "aws_iam_role_policy" "ecr-app-permission" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid      = "AllowAppRunnerAssumeRole"
+        Sid      = "Statement1"
         Action   = "apprunner:*"
         Effect   = "Allow"
         Resource = "*"
       },
       {
-        Sid = "AllowEcrAssumeRole"
+        Sid      = "Statement2"
+        Action   = [
+          "iam:PaaRole",
+          "iam:CreateServiceLinkedRole"
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
+      {
+        Sid = "Statement3"
         Action = [
           "ecr:GetDownloadUrlForLayer",
           "ecr:BatchGetImage",
