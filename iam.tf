@@ -82,8 +82,8 @@ resource "aws_iam_role_policy" "ecr-app-permission" {
         Resource = "*"
       },
       {
-        Sid      = "Statement2"
-        Action   = [
+        Sid = "Statement2"
+        Action = [
           "iam:PaaRole",
           "iam:CreateServiceLinkedRole"
         ]
