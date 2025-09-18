@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  push:
+    branches: ["man"]
+  
+jobs:
+
+  run-terraform:
+    if: false
+    name: 'Run terraform'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure AWS credentials
+        uses: ''
+
+      - name: Setup terraform
+        uses: hashicorp/setup-terraform@v3
