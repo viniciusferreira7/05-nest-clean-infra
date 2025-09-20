@@ -13,7 +13,27 @@ jobs:
 
     steps:
       - name: Configure AWS credentials
-        uses: ''
-
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          # role-to-assume: ${{ secrets.AWS_ROLE_ID }}
+          aws-region: us-east-2
       - name: Setup terraform
         uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.13.3
+        
+      - name: Run terraform init
+        run: terraform int
+      - name: Run terraform format
+        run: terraform fmt -check
+      - name: Run terraform validade
+        run: terraform validate
+      - name: Run terraform plan
+        run: terraform plan
+        env: 
+          TF_VAR_profile: ${{ secrets.AWS_PROFILE }}
+      - name: Run terraform apply
+        run: terraform apply
+        if: false
+        env: 
+          TF_VAR_profile: ${{ secrets.AWS_PROFILE }}
