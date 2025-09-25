@@ -7,7 +7,6 @@ on:
 jobs:
 
   run-terraform:
-    if: false
     name: 'Run terraform'
     runs-on: ubuntu-latest
 
