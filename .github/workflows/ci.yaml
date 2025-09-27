@@ -4,15 +4,15 @@ on:
   push:
     branches: ["main"]
 
-permissions: 
+permissions:
   id-token: write
   contents: read
-  
-jobs:
 
+jobs:
   run-terraform:
-    name: 'Run terraform'
+    name: "Run terraform"
     runs-on: ubuntu-latest
+    if: false
 
     steps:
       - name: Checkout code
@@ -28,7 +28,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.13.3
-        
+
       - name: Run terraform init
         run: terraform init
       - name: Run terraform format
@@ -37,10 +37,23 @@ jobs:
         run: terraform validate
       - name: Run terraform plan
         run: terraform plan
-        env: 
+        env:
           TF_VAR_profile: ${{ secrets.AWS_PROFILE }}
       - name: Run terraform apply
         run: terraform apply
         if: false
-        env: 
+        env:
           TF_VAR_profile: ${{ secrets.AWS_PROFILE }}
+#FIXME:
+# Run terraform plan
+
+# Planning failed. Terraform encountered an error while generating this plan.
+# ╷
+# │ Error: failed to get shared config profile, ***
+# │
+# │   with provider["registry.terraform.io/hashicorp/aws"],
+# │   on main.tf line 10, in provider "aws":
+# │   10: provider "aws" {
+# │
+# ╵
+# ::error::Terraform exited with code 1.

@@ -68,8 +68,8 @@ resource "aws_iam_role" "ecr_role" {
   }
 }
 
-resource "aws_iam_role_policy" "ecr-app-permission" {
-  name = "ecr-app-permission"
+resource "aws_iam_role_policy" "ecr_app_permission" {
+  name = "ecr_app_permission"
   role = aws_iam_role.ecr_role.id
 
   policy = jsonencode({
@@ -109,7 +109,7 @@ resource "aws_iam_role_policy" "ecr-app-permission" {
   })
 }
 
-resource "aws_iam_role" "tf-role" {
+resource "aws_iam_role" "tf_role" {
   name = "tf_role"
 
   assume_role_policy = jsonencode({
@@ -141,4 +141,27 @@ resource "aws_iam_role" "tf-role" {
     IAC = "True"
   }
 
+}
+
+resource "aws_iam_role_policy" "tf_app_permission" {
+  name = "tf_app_permission"
+  role = aws_iam_role.tf_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid      = "Statement1"
+        Action   = "erc:*"
+        Effect   = "Allow"
+        Resource = "*"
+      },
+      {
+        Sid      = "Statement2"
+        Action   = "iam:*"
+        Effect   = "Allow"
+        Resource = "*"
+      },
+    ]
+  })
 }
