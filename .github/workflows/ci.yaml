@@ -27,7 +27,7 @@ jobs:
       - name: Setup terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.13.3
+          terraform_version: ${{ vars.TF_VERSION }}
 
       - name: Run terraform init
         run: terraform init
