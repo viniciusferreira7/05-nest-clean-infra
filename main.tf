@@ -5,6 +5,11 @@ terraform {
       version = "6.5.0"
     }
   }
+    backend "s3" {
+      bucket   = "05-nest-clean-infra-backend"
+      key    = "state/terraform.tfstate"
+      region = "us-east-2"
+    }
 }
 
 provider "aws" {
