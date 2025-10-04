@@ -7,6 +7,7 @@ on:
 permissions:
   id-token: write
   contents: read
+  pull-requests: write
 
 jobs:
   run-terraform:
@@ -36,11 +37,28 @@ jobs:
       - name: Run terraform validate
         run: terraform validate
       - name: Run terraform plan
-        run: terraform plan
+        run: terraform plan -out=tfplan.binary
         env:
           TF_VAR_profile: ${{ secrets.AWS_PROFILE }}
+
+      - name: Setup Infracost
+        uses: infracost/actions/setup@v3
+        with:
+          api-key: ${{ secrets.INFRACOST_API_KEY }}
+
+      - name: Generate Infracost JSON
+        run: infracost breakdown --path tfplan.binary --format json --out-file /tmp/infracost.json
+
+      - name: Post Infracost comment
+        run: |
+          infracost comment github --path /tmp/infracost.json \
+            --repo $GITHUB_REPOSITORY \
+            --pull-request ${{ github.event.pull_request.number }} \
+            --github-token ${{ secrets.GITHUB_TOKEN }} \
+            --behavior update
+
       - name: Run terraform apply
-        run: terraform apply
+        run: terraform apply -auto-approve tfplan.binary
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         env:
           TF_VAR_profile: ${{ secrets.AWS_PROFILE }}
