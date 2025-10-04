@@ -41,6 +41,6 @@ jobs:
           TF_VAR_profile: ${{ secrets.AWS_PROFILE }}
       - name: Run terraform apply
         run: terraform apply
-        if: false
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         env:
           TF_VAR_profile: ${{ secrets.AWS_PROFILE }}
